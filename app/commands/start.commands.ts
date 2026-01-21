@@ -1,7 +1,7 @@
 import { Context } from "grammy";
 
-import startKeyboard from "../keyboards/start.keyboard.ts";
-import userService from "../services/user.service.ts";
+import startKeyboard from "../keyboards/start.keyboard";
+import userService from "../services/user.service";
 
 const startCommand = async (ctx: Context) => {
     try {

@@ -1,5 +1,5 @@
 import { Bot } from "grammy";
-import initCommands from "./commands/init.commands.ts";
+import initCommands from "./commands/init.commands";
 
 const createBot = () => {
     try {

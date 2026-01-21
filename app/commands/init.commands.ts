@@ -1,10 +1,11 @@
 import { Bot } from "grammy";
-import startCommand from "./start.commands.ts";
+import startCommand from "./start.commands";
 
-import sequelize from "../../plugins/sequelize.ts";
+import sequelize from "../../plugins/sequelize";
 
-import { handleBotAddedToGroup } from "../handlers/group.handler.ts";
-import { handleGroupMessage } from "../handlers/message.handler.ts";
+import { handleBotAddedToGroup } from "../handlers/group.handler";
+import { handleGroupMessage } from "../handlers/message.handler";
+import { handleSearchCommand, handleSearchSelection, handleUserMessageForSearch } from "../handlers/search.handler";
 
 const initCommands = async (bot: Bot) => {
     try {
@@ -17,7 +18,23 @@ const initCommands = async (bot: Bot) => {
         bot.command("start", startCommand);
 
         bot.on("my_chat_member", handleBotAddedToGroup);
-        bot.on("message:text", handleGroupMessage);
+        bot.callbackQuery("search", handleSearchCommand);
+        bot.callbackQuery(/search_(all|group_)/, handleSearchSelection);
+
+        bot.on("message:text", async (ctx, next) => {
+            if (ctx.chat.type === "private") {
+                await handleUserMessageForSearch(ctx);
+                return;
+            }
+            return next();
+        });
+
+
+        bot.on("message:text", async (ctx) => {
+            if (ctx.chat.type === "group" || ctx.chat.type === "supergroup") {
+                await handleGroupMessage(ctx);
+            }
+        });
     }
     catch (error) {
         console.log(error);

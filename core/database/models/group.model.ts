@@ -1,10 +1,10 @@
 import { DataTypes, Model } from 'sequelize';
 import type { Optional } from "sequelize";
 
-import sequelize from "../../../plugins/sequelize.ts";
+import sequelize from "../../../plugins/sequelize";
 
 interface GroupAttributes {
-    id: number;
+    id: string;
     group_id: string;
     title: string;
     username: string | null;
@@ -13,10 +13,15 @@ interface GroupAttributes {
     updated_at: Date;
 }
 
-interface GroupCreationAttributes extends Optional<GroupAttributes, 'id' | 'username' | 'created_at' | 'updated_at'> {}
+interface GroupCreationAttributes extends Optional<
+    GroupAttributes, 'id' | 'username' | 'created_at' | 'updated_at'
+> {}
 
-export class Group extends Model<GroupAttributes, GroupCreationAttributes> implements GroupAttributes {
-    public id!: number;
+class Group extends Model<
+    GroupAttributes, 
+    GroupCreationAttributes
+> implements GroupAttributes {
+    public id!: string;
     public group_id!: string;
     public title!: string;
     public username!: string | null;
@@ -27,15 +32,44 @@ export class Group extends Model<GroupAttributes, GroupCreationAttributes> imple
 
 Group.init(
     {
-        id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-        group_id: { type: DataTypes.STRING, allowNull: false, unique: true },
-        title: { type: DataTypes.STRING, allowNull: false },
-        username: { type: DataTypes.STRING, allowNull: true },
-        type: { type: DataTypes.STRING, allowNull: false },
-        created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-        updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-    },
-    {
+        id: { 
+            type: DataTypes.UUID,
+            allowNull: false,
+            defaultValue: DataTypes.UUIDV4, 
+            primaryKey: true 
+        },
+
+        group_id: { 
+            type: DataTypes.STRING,
+            allowNull: false, 
+            unique: true 
+        },
+
+        title: { 
+            type: DataTypes.STRING, 
+            allowNull: false 
+        },
+
+        username: { 
+            type: DataTypes.STRING, 
+            allowNull: true 
+        },
+
+        type: { 
+            type: DataTypes.ENUM('group', 'supergroup'),
+            allowNull: false 
+        },
+
+        created_at: { 
+            type: DataTypes.DATE, 
+            defaultValue: DataTypes.NOW 
+        },
+
+        updated_at: { 
+            type: DataTypes.DATE, 
+            defaultValue: DataTypes.NOW 
+        },
+    }, {
         sequelize,
         tableName: 'groups',
         modelName: 'Group',

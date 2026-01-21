@@ -1,11 +1,15 @@
 import { Context } from "grammy";
-import groupService from "../services/group.service.ts";
+import groupService from "../services/group.service";
 
 const handleBotAddedToGroup = async (ctx: Context) => {
     try {
         const chat = ctx.chat;
+        if (!chat) {
+            return;
+        }
+        
         if (chat.type !== "group" && chat.type !== "supergroup") {
-            throw new Error('Тип группы могут быть: "group", "supergroup"');
+            return;
         }
 
         await groupService.creteGroup(chat);

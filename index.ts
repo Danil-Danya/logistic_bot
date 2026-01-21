@@ -2,9 +2,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
-import router from './server/routes/router.ts';
+import router from './server/routes/router';
 
-import createBot from './app/bot.ts';
+import createBot from './app/bot';
+import swagger from 'plugins/swagger';
+
+import errorMiddleware from './server/middlewares/error.middleware';
 
 import type { Application } from 'express';
 
@@ -13,10 +16,13 @@ const ADDRESS: string = process.env.ADDRESS || '127.0.0.1';
 
 const app: Application = express();
 
-app.use(express.urlencoded({extended:  true, limit: "500mb"}));
+app.use(express.urlencoded({ extended:  true, limit: "500mb" }));
 app.use(express.json());
+app.use(errorMiddleware);
 
 app.use('/server-api/v1', router);
+
+swagger(app);
 
 const main = async () => {
     try {

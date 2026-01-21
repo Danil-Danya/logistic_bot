@@ -10,7 +10,7 @@ interface DBEnv {
     DB_PORT?: string;
 }
 
-const env: DBEnv = process.env;
+const env = process.env;
 
 const sequelize: Sequelize = new Sequelize({
     username: env.DB_SERVERNAME,

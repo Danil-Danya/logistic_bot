@@ -1,4 +1,5 @@
-import Group from '../../core/database/models/group.model.ts';
+import PaginateDTO from 'server/dtos/paginate.dto';
+import Group from '../../core/database/models/group.model';
 
 class GroupService {
     async creteGroup (chat: any) {
@@ -22,7 +23,16 @@ class GroupService {
     }
 
     async findByGroupId(groupId: string) {
-        return Group.findOne({ where: { group_id: groupId } });
+        return await Group.findOne({ where: { group_id: groupId } });
+    }
+
+    async findGroupByName(groupName: string) {
+        return await Group.findOne({ where: { title: groupName } });
+    }
+
+    async findAllGroups(paginate: PaginateDTO) {
+        const offset = paginate.page * paginate.limit - paginate.limit;
+        return await Group.findAndCountAll({ limit: paginate.limit, offset });
     }
 }
 

@@ -1,10 +1,10 @@
 import { DataTypes, Model } from 'sequelize';
 import type { Optional } from "sequelize";
 
-import sequelize from "../../../plugins/sequelize.ts";
+import sequelize from "../../../plugins/sequelize";
 
 interface MessageAttributes {
-    id: number;
+    id: string;
     message_id: string;
     author_name: string | null;
     text: string;
@@ -13,10 +13,15 @@ interface MessageAttributes {
 
 }
 
-interface MessageCreationAttributes extends Optional<MessageAttributes, 'id' | 'author_name' | 'date'> {}
+interface MessageCreationAttributes extends Optional<
+    MessageAttributes, 'id' | 'author_name' | 'date'
+> {}
 
-export class Message extends Model<MessageAttributes, MessageCreationAttributes> implements MessageAttributes {
-    public id!: number;
+class Message extends Model<
+    MessageAttributes, 
+    MessageCreationAttributes
+> implements MessageAttributes {
+    public id!: string;
     public message_id!: string;
     public author_name!: string | null;
     public text!: string;
@@ -24,21 +29,42 @@ export class Message extends Model<MessageAttributes, MessageCreationAttributes>
     public group_id!: string;
 }
 
-Message.init(
-    {
-        id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-        message_id: { type: DataTypes.STRING, allowNull: false },
-        author_name: { type: DataTypes.STRING, allowNull: true },
-        text: { type: DataTypes.TEXT, allowNull: false },
-        date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-        group_id: { type: DataTypes.STRING, allowNull: false },
+Message.init({
+    id: { 
+        type: DataTypes.UUID, 
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true 
     },
-    {
-        sequelize,
-        tableName: 'messages',
-        modelName: 'Message',
-        timestamps: false,
-    }
-);
+
+    message_id: { 
+        type: DataTypes.STRING, 
+        allowNull: false 
+    },
+
+    author_name: { 
+        type: DataTypes.STRING, 
+        allowNull: true 
+    },
+
+    text: { 
+        type: DataTypes.TEXT, 
+        allowNull: false 
+    },
+
+    date: { 
+        type: DataTypes.DATE, 
+        defaultValue: DataTypes.NOW 
+    },
+
+    group_id: { 
+        type: DataTypes.STRING, 
+        allowNull: false 
+    },
+}, {
+    sequelize,
+    tableName: 'messages',
+    modelName: 'Message',
+    timestamps: false,
+});
 
 export default Message;

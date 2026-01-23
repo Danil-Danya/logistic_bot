@@ -1,12 +1,19 @@
-import generateGroupKeyboard from "../keyboards/group.keyboard.ts";
-import Message from "../../core/database/models/message.model.ts";
-import { Op } from "sequelize";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.handleUserMessageForSearch = exports.handleSearchSelection = exports.handleSearchCommand = void 0;
+const group_keyboard_1 = __importDefault(require("../keyboards/group.keyboard"));
+const message_model_1 = __importDefault(require("../../core/database/models/message.model"));
+const sequelize_1 = require("sequelize");
 const userSearchState = new Map();
-export const handleSearchCommand = async (ctx) => {
-    const keyboard = await generateGroupKeyboard();
+const handleSearchCommand = async (ctx) => {
+    const keyboard = await (0, group_keyboard_1.default)();
     await ctx.reply("Выберите группу, по которой искать грузы:", { reply_markup: keyboard });
 };
-export const handleSearchSelection = async (ctx) => {
+exports.handleSearchCommand = handleSearchCommand;
+const handleSearchSelection = async (ctx) => {
     const data = ctx.callbackQuery?.data;
     if (!data) {
         console.log("Нет callbackQuery.data");
@@ -23,7 +30,8 @@ export const handleSearchSelection = async (ctx) => {
         ? "Введите ключевые слова для поиска по всем группам:"
         : `Введите ключевые слова для поиска в выбранной группе (${groupId}):`);
 };
-export const handleUserMessageForSearch = async (ctx) => {
+exports.handleSearchSelection = handleSearchSelection;
+const handleUserMessageForSearch = async (ctx) => {
     const userId = ctx.from?.id;
     if (!userId)
         return;
@@ -37,9 +45,9 @@ export const handleUserMessageForSearch = async (ctx) => {
     }
     console.log(state.groupId);
     const where = state.isAll
-        ? { text: { [Op.iLike]: `%${query}%` } }
-        : { group_id: state.groupId?.toString(), text: { [Op.iLike]: `%${query}%` } };
-    const results = await Message.findAll({ where, limit: 10 });
+        ? { text: { [sequelize_1.Op.iLike]: `%${query}%` } }
+        : { group_id: state.groupId?.toString(), text: { [sequelize_1.Op.iLike]: `%${query}%` } };
+    const results = await message_model_1.default.findAll({ where, limit: 10 });
     if (!results.length) {
         userSearchState.delete(userId);
         return ctx.reply("❌ Ничего не найдено.");
@@ -56,3 +64,4 @@ export const handleUserMessageForSearch = async (ctx) => {
     userSearchState.delete(userId);
     await ctx.reply("✅ Поиск завершён.");
 };
+exports.handleUserMessageForSearch = handleUserMessageForSearch;

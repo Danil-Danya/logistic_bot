@@ -1,4 +1,9 @@
-import groupService from "../services/group.service.ts";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const group_service_1 = __importDefault(require("../services/group.service"));
 class GroupController {
     async getAll(req, res, next) {
         try {
@@ -12,7 +17,7 @@ class GroupController {
             const searchField = req.query.search_field;
             const paginate = { page, limit };
             const filters = { where, whereField, orderBy, orderType, search, searchField };
-            const groups = await groupService.getAllGroups(paginate, filters);
+            const groups = await group_service_1.default.getAllGroups(paginate, filters);
             return res.status(200).json(groups);
         }
         catch (error) {
@@ -22,7 +27,7 @@ class GroupController {
     async getById(req, res, next) {
         try {
             const id = req.params.id;
-            const group = await groupService.getGroupById(id);
+            const group = await group_service_1.default.getGroupById(id);
             return res.status(200).json(group);
         }
         catch (error) {
@@ -32,7 +37,7 @@ class GroupController {
     async delete(req, res, next) {
         try {
             const id = req.params.id;
-            const deletedMessage = await groupService.deleteGroup(id);
+            const deletedMessage = await group_service_1.default.deleteGroup(id);
             return res.status(200).json(deletedMessage);
         }
         catch (error) {
@@ -45,7 +50,7 @@ class GroupController {
             const title = req.body.name;
             const user_name = req.body.user_name;
             const type = req.body.type;
-            const updatedGroup = await groupService.updateGroup(id, { title, user_name, type });
+            const updatedGroup = await group_service_1.default.updateGroup(id, { title, user_name, type });
             return res.status(200).json(updatedGroup);
         }
         catch (error) {
@@ -58,7 +63,7 @@ class GroupController {
             const title = req.body.name;
             const user_name = req.body.user_name;
             const type = req.body.type;
-            const editedGroup = await groupService.editGroup(id, { title, user_name, type });
+            const editedGroup = await group_service_1.default.editGroup(id, { title, user_name, type });
             return res.status(200).json(editedGroup);
         }
         catch (error) {
@@ -66,4 +71,4 @@ class GroupController {
         }
     }
 }
-export default new GroupController();
+exports.default = new GroupController();

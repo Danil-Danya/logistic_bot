@@ -1,8 +1,13 @@
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
-dotenv.config();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const env = process.env;
-const sequelize = new Sequelize({
+const sequelize = new sequelize_1.Sequelize({
     username: env.DB_SERVERNAME,
     password: env.DB_PASSWORD,
     database: env.DB_NAME,
@@ -20,4 +25,4 @@ const sequelize = new Sequelize({
         console.error('Ошибка при подключении к базе данных', err);
     }
 })();
-export default sequelize;
+exports.default = sequelize;

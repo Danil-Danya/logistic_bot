@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class ApiError extends Error {
     status;
     errors;
@@ -26,4 +28,4 @@ class ApiError extends Error {
         return new ApiError(500, "Сервер упал, пожалуйста, перезапустите сервер", errors);
     }
 }
-export default ApiError;
+exports.default = ApiError;

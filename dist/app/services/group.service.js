@@ -1,14 +1,19 @@
-import Group from '../../core/database/models/group.model.ts';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const group_model_1 = __importDefault(require("../../core/database/models/group.model"));
 class GroupService {
     async creteGroup(chat) {
         if (!chat.id) {
             return;
         }
-        const group = await Group.findOne({ where: { group_id: chat.id.toString() } });
+        const group = await group_model_1.default.findOne({ where: { group_id: chat.id.toString() } });
         if (group) {
             return;
         }
-        const newGroup = await Group.create({
+        const newGroup = await group_model_1.default.create({
             group_id: chat.id,
             title: chat.title,
             username: chat.username,
@@ -17,13 +22,14 @@ class GroupService {
         return newGroup;
     }
     async findByGroupId(groupId) {
-        return await Group.findOne({ where: { group_id: groupId } });
+        return await group_model_1.default.findOne({ where: { group_id: groupId } });
     }
     async findGroupByName(groupName) {
-        return await Group.findOne({ where: { title: groupName } });
+        return await group_model_1.default.findOne({ where: { title: groupName } });
     }
     async findAllGroups(paginate) {
-        return await Group.findAndCountAll({ limit: paginate.limit, page: paginate.page });
+        const offset = paginate.page * paginate.limit - paginate.limit;
+        return await group_model_1.default.findAndCountAll({ limit: paginate.limit, offset });
     }
 }
-export default new GroupService;
+exports.default = new GroupService;

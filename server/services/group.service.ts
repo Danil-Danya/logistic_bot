@@ -1,8 +1,8 @@
 import ApiError from "../../core/errors/api.error";
 
-import PaginateDTO from "server/dtos/paginate.dto";
-import FiltersDTO from "server/dtos/filters.dto";
-import GroupDTO from "server/dtos/group.dto";
+import { PaginateDTO } from "server/dtos/paginate.dto";
+import { FiltersDTO } from "server/dtos/filters.dto";
+import { UpdateGroupDTO } from "server/dtos/group.dto";
 
 import GroupModel from "core/database/models/group.model";
 
@@ -78,7 +78,7 @@ class groupService {
         };
     }
 
-    async updateGroup(id: string, data: GroupDTO) {
+    async updateGroup(id: string, data: UpdateGroupDTO) {
         if (!id) {
             throw ApiError.BadRequest("Не передан ID группы");
         }
@@ -92,7 +92,7 @@ class groupService {
         return updatedGroup;
     }
 
-    async editGroup(id: string, data: GroupDTO) {
+    async editGroup(id: string, data: UpdateGroupDTO) {
         if (!id) {
             throw ApiError.BadRequest("Не передан ID группы");
         }
@@ -102,7 +102,7 @@ class groupService {
             throw ApiError.NotFound("Группа не найдена");
         }
 
-        (Object.keys(data) as (keyof GroupDTO)[]).forEach((key) => {
+        (Object.keys(data) as (keyof UpdateGroupDTO)[]).forEach((key) => {
             if (data[key] !== undefined) {
                 group[key] = data[key];
             }

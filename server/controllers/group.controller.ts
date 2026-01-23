@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import PaginateDTO from "../dtos/paginate.dto";
-import FiltersDTO from "../dtos/filters.dto";
+import { PaginateDTO } from "../dtos/paginate.dto";
+import { FiltersDTO } from "../dtos/filters.dto";
 
 import groupService from "../services/group.service";
 

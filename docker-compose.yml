@@ -1,0 +1,47 @@
+  version: "3.3"
+
+  services:
+    app:
+      build: .
+      ports:
+        - "5000:5000"
+      container_name: Logistic_Bot
+      env_file: .env
+      environment:
+        - NODE_ENV=development
+        - DB_HOST=postgres
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+        - DB_NAME=${DB_NAME}
+        - DB_PORT=${DB_PORT}
+      volumes: 
+        - .:/app
+        - /app/node_modules
+      depends_on:
+        - postgres
+
+    postgres:
+      image: postgres:13
+      restart: always
+      env_file: .env
+      environment:
+        POSTGRES_DB: ${DB_NAME}
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        OPTIONS: "-c log_connections=off -c log_disconnections=off -c log_min_messages=warning"
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres-data:/var/lib/postgresql/data
+
+    redis:
+      image: redis:7.0.0-alpine
+      restart: always
+      ports:
+        - "6379:6379"
+      volumes:
+        - redis-data:/data
+
+  volumes:
+    postgres-data: null
+    redis-data: null

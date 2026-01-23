@@ -1,4 +1,4 @@
-import PaginateDTO from 'server/dtos/paginate.dto';
+import { PaginateDTO } from 'server/dtos/paginate.dto';
 import Group from '../../core/database/models/group.model';
 
 class GroupService {

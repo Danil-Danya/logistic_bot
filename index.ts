@@ -18,9 +18,9 @@ const app: Application = express();
 
 app.use(express.urlencoded({ extended:  true, limit: "500mb" }));
 app.use(express.json());
-app.use(errorMiddleware);
 
 app.use('/server-api/v1', router);
+app.use(errorMiddleware);
 
 swagger(app);
 

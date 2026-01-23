@@ -2,10 +2,23 @@ import { Bot } from "grammy";
 import startCommand from "./start.commands";
 
 import sequelize from "../../plugins/sequelize";
+import newsletterState from "app/states/newsletter.state";
 
 import { handleBotAddedToGroup } from "../handlers/group.handler";
 import { handleGroupMessage } from "../handlers/message.handler";
-import { handleSearchCommand, handleSearchSelection, handleUserMessageForSearch } from "../handlers/search.handler";
+
+import { handleSubscribeFolderCallback } from "../handlers/folder.handler";
+
+import { 
+    handleNewsletterStart, 
+    newsletterHandler 
+} from "app/handlers/newsletter.handler";
+
+import { 
+    handleSearchCommand, 
+    handleSearchSelection, 
+    handleUserMessageForSearch 
+} from "../handlers/search.handler";
 
 const initCommands = async (bot: Bot) => {
     try {
@@ -18,17 +31,27 @@ const initCommands = async (bot: Bot) => {
         bot.command("start", startCommand);
 
         bot.on("my_chat_member", handleBotAddedToGroup);
+
+        bot.callbackQuery("newsletter", handleNewsletterStart);
+        bot.callbackQuery(/^subscribe_folder_(.+)$/, handleSubscribeFolderCallback);
         bot.callbackQuery("search", handleSearchCommand);
         bot.callbackQuery(/search_(all|group_)/, handleSearchSelection);
 
         bot.on("message:text", async (ctx, next) => {
-            if (ctx.chat.type === "private") {
-                await handleUserMessageForSearch(ctx);
+            if (ctx.chat.type !== "private") {
+                return next();
+            }
+
+            const chatId = ctx.chat.id.toString();
+
+            if (newsletterState.has(chatId)) {
+                newsletterState.delete(chatId);
+                await newsletterHandler(ctx);
                 return;
             }
-            return next();
-        });
 
+            await handleUserMessageForSearch(ctx);
+        });
 
         bot.on("message:text", async (ctx) => {
             if (ctx.chat.type === "group" || ctx.chat.type === "supergroup") {

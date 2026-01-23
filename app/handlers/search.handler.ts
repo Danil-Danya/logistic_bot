@@ -48,8 +48,6 @@ export const handleUserMessageForSearch = async (ctx: Context) => {
     if (!query) {
         return ctx.reply("⚠️ Введите текст запроса для поиска.");
     }
-
-    console.log(state.groupId);
     
 
     const where = state.isAll

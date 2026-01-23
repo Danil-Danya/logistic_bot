@@ -1,6 +1,11 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../../../plugins/sequelize';
-class Folder extends Model {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const sequelize_2 = __importDefault(require("../../../plugins/sequelize"));
+class Folder extends sequelize_1.Model {
     id;
     name;
     link;
@@ -9,32 +14,32 @@ class Folder extends Model {
 }
 Folder.init({
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
         primaryKey: true,
     },
     name: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
     link: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
     created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: sequelize_1.DataTypes.DATE,
+        defaultValue: sequelize_1.DataTypes.NOW,
     },
     updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        type: sequelize_1.DataTypes.DATE,
+        defaultValue: sequelize_1.DataTypes.NOW,
     }
 }, {
-    sequelize,
+    sequelize: sequelize_2.default,
     tableName: 'folders',
     modelName: 'Folder',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     timestamps: true,
 });
-export default Folder;
+exports.default = Folder;

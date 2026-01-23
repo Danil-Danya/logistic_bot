@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const paginateSerialize = ({ count, rows }, { limit, offset }) => {
     const currentPage = Math.floor(offset / limit) + 1;
     const total_pages = Math.ceil(count / limit);
@@ -10,4 +12,4 @@ const paginateSerialize = ({ count, rows }, { limit, offset }) => {
         rows,
     };
 };
-export default paginateSerialize;
+exports.default = paginateSerialize;

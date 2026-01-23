@@ -1,7 +1,12 @@
-import ApiError from "core/errors/api.error.ts";
-import GroupModel from "core/database/models/group.model.ts";
-import { Op } from "sequelize";
-import paginateSerialize from "server/utils/serializePaginate.ts";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const api_error_1 = __importDefault(require("../../core/errors/api.error"));
+const group_model_1 = __importDefault(require("core/database/models/group.model"));
+const sequelize_1 = require("sequelize");
+const serializePaginate_1 = __importDefault(require("server/utils/serializePaginate"));
 class groupService {
     include;
     constructor() {
@@ -17,37 +22,37 @@ class groupService {
             whereClause[whereField] = where;
         }
         if (search && searchField) {
-            whereClause[searchField] = { [Op.iLike]: `%${search}%` };
+            whereClause[searchField] = { [sequelize_1.Op.iLike]: `%${search}%` };
         }
         if (orderBy && orderType) {
             orderClause = [[orderBy, orderType.toUpperCase()]];
         }
-        const groups = await GroupModel.findAndCountAll({
+        const groups = await group_model_1.default.findAndCountAll({
             where: whereClause,
             order: orderClause,
             include: this.include,
             offset,
             limit,
         });
-        return paginateSerialize(groups, { limit, offset });
+        return (0, serializePaginate_1.default)(groups, { limit, offset });
     }
     async getGroupById(id) {
         if (!id) {
-            throw ApiError.BadRequest("Не передан ID группы");
+            throw api_error_1.default.BadRequest("Не передан ID группы");
         }
-        const group = await GroupModel.findByPk(id, { include: this.include });
+        const group = await group_model_1.default.findByPk(id, { include: this.include });
         if (!group) {
-            throw ApiError.NotFound("Группа не найдена");
+            throw api_error_1.default.NotFound("Группа не найдена");
         }
         return group;
     }
     async deleteGroup(id) {
         if (!id) {
-            throw ApiError.BadRequest("Не передан ID группы");
+            throw api_error_1.default.BadRequest("Не передан ID группы");
         }
-        const group = await GroupModel.findByPk(id);
+        const group = await group_model_1.default.findByPk(id);
         if (!group) {
-            throw ApiError.NotFound("Группа не найдена");
+            throw api_error_1.default.NotFound("Группа не найдена");
         }
         await group.destroy();
         return {
@@ -56,22 +61,22 @@ class groupService {
     }
     async updateGroup(id, data) {
         if (!id) {
-            throw ApiError.BadRequest("Не передан ID группы");
+            throw api_error_1.default.BadRequest("Не передан ID группы");
         }
-        const group = await GroupModel.findByPk(id);
+        const group = await group_model_1.default.findByPk(id);
         if (!group) {
-            throw ApiError.NotFound("Группа не найдена");
+            throw api_error_1.default.NotFound("Группа не найдена");
         }
         const updatedGroup = await group.update(data);
         return updatedGroup;
     }
     async editGroup(id, data) {
         if (!id) {
-            throw ApiError.BadRequest("Не передан ID группы");
+            throw api_error_1.default.BadRequest("Не передан ID группы");
         }
-        const group = await GroupModel.findByPk(id);
+        const group = await group_model_1.default.findByPk(id);
         if (!group) {
-            throw ApiError.NotFound("Группа не найдена");
+            throw api_error_1.default.NotFound("Группа не найдена");
         }
         Object.keys(data).forEach((key) => {
             if (data[key] !== undefined) {
@@ -82,4 +87,4 @@ class groupService {
         return editedGroup;
     }
 }
-export default new groupService();
+exports.default = new groupService();

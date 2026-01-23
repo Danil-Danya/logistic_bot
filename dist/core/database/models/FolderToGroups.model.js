@@ -1,28 +1,33 @@
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../../../plugins/sequelize';
-class FolderToGroups extends Model {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const sequelize_2 = __importDefault(require("../../../plugins/sequelize"));
+class FolderToGroups extends sequelize_1.Model {
     id;
     folder_id;
     group_id;
 }
 FolderToGroups.init({
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: sequelize_1.DataTypes.UUID,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
         primaryKey: true,
     },
     folder_id: {
-        type: DataTypes.UUID,
+        type: sequelize_1.DataTypes.UUID,
         allowNull: false,
     },
     group_id: {
-        type: DataTypes.UUID,
+        type: sequelize_1.DataTypes.UUID,
         allowNull: false,
     },
 }, {
-    sequelize,
+    sequelize: sequelize_2.default,
     tableName: 'folder_to_groups',
     modelName: 'FolderToGroups',
     timestamps: false,
 });
-export default FolderToGroups;
+exports.default = FolderToGroups;

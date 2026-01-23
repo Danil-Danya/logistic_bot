@@ -1,58 +1,72 @@
-import sequelize from "../../../plugins/sequelize";
-import User from "./user.model.ts";
-import Role from "./roles.model.ts";
-import Group from "./group.model.ts";
-import Message from "./message.model.ts";
-import Folder from "./folders.model.ts";
-import Tariff from "./tariffs.model.ts";
-import FolderToGroups from "./FolderToGroups.model.ts";
-import FolderToUser from "./folderToUser.model.ts";
-import TariffToUser from "./tariffToUser.model.ts";
-sequelize.sync();
-Group.hasMany(Message, {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TariffToUser = exports.FolderToUser = exports.FolderToGroups = exports.Role = exports.Tariff = exports.Folder = exports.Message = exports.Group = exports.User = void 0;
+const sequelize_1 = __importDefault(require("../../../plugins/sequelize"));
+const user_model_1 = __importDefault(require("./user.model"));
+exports.User = user_model_1.default;
+const roles_model_1 = __importDefault(require("./roles.model"));
+exports.Role = roles_model_1.default;
+const group_model_1 = __importDefault(require("./group.model"));
+exports.Group = group_model_1.default;
+const message_model_1 = __importDefault(require("./message.model"));
+exports.Message = message_model_1.default;
+const folders_model_1 = __importDefault(require("./folders.model"));
+exports.Folder = folders_model_1.default;
+const tariffs_model_1 = __importDefault(require("./tariffs.model"));
+exports.Tariff = tariffs_model_1.default;
+const FolderToGroups_model_1 = __importDefault(require("./FolderToGroups.model"));
+exports.FolderToGroups = FolderToGroups_model_1.default;
+const folderToUser_model_1 = __importDefault(require("./folderToUser.model"));
+exports.FolderToUser = folderToUser_model_1.default;
+const tariffToUser_model_1 = __importDefault(require("./tariffToUser.model"));
+exports.TariffToUser = tariffToUser_model_1.default;
+sequelize_1.default.sync();
+group_model_1.default.hasMany(message_model_1.default, {
     foreignKey: 'group_id',
     sourceKey: 'group_id',
     as: 'messages',
 });
-Message.belongsTo(Group, {
+message_model_1.default.belongsTo(group_model_1.default, {
     foreignKey: 'group_id',
     targetKey: 'group_id',
     as: 'group',
 });
-Folder.belongsToMany(Group, {
-    through: FolderToGroups,
+folders_model_1.default.belongsToMany(group_model_1.default, {
+    through: FolderToGroups_model_1.default,
     foreignKey: 'folder_id',
     otherKey: 'group_id',
     as: 'groups',
 });
-Group.belongsToMany(Folder, {
-    through: FolderToGroups,
+group_model_1.default.belongsToMany(folders_model_1.default, {
+    through: FolderToGroups_model_1.default,
     foreignKey: 'group_id',
     otherKey: 'folder_id',
     as: 'folders',
 });
-Folder.belongsToMany(User, {
-    through: FolderToUser,
+folders_model_1.default.belongsToMany(user_model_1.default, {
+    through: folderToUser_model_1.default,
     foreignKey: 'folder_id',
     otherKey: 'user_id',
     as: 'users',
 });
-User.belongsToMany(Folder, {
-    through: FolderToUser,
+user_model_1.default.belongsToMany(folders_model_1.default, {
+    through: folderToUser_model_1.default,
     foreignKey: 'user_id',
     otherKey: 'folder_id',
     as: 'folders',
 });
-Tariff.belongsToMany(User, {
-    through: TariffToUser,
+tariffs_model_1.default.belongsToMany(user_model_1.default, {
+    through: tariffToUser_model_1.default,
     foreignKey: 'tariff_id',
     otherKey: 'user_id',
     as: 'users',
 });
-User.belongsToMany(Tariff, {
-    through: TariffToUser,
+user_model_1.default.belongsToMany(tariffs_model_1.default, {
+    through: tariffToUser_model_1.default,
     foreignKey: 'user_id',
     otherKey: 'tariff_id',
     as: 'tariffs',
 });
-export { User, Group, Message, Folder, Tariff, Role, FolderToGroups, FolderToUser, TariffToUser, };

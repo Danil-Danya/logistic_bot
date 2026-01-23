@@ -1,6 +1,11 @@
-import { DataTypes, Model } from 'sequelize';
-import sequelize from "../../../plugins/sequelize";
-class Group extends Model {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const sequelize_1 = require("sequelize");
+const sequelize_2 = __importDefault(require("../../../plugins/sequelize"));
+class Group extends sequelize_1.Model {
     id;
     group_id;
     title;
@@ -11,41 +16,41 @@ class Group extends Model {
 }
 Group.init({
     id: {
-        type: DataTypes.UUID,
+        type: sequelize_1.DataTypes.UUID,
         allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
         primaryKey: true
     },
     group_id: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         unique: true
     },
     title: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
     username: {
-        type: DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING,
         allowNull: true
     },
     type: {
-        type: DataTypes.ENUM('group', 'supergroup'),
+        type: sequelize_1.DataTypes.ENUM('group', 'supergroup'),
         allowNull: false
     },
     created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        type: sequelize_1.DataTypes.DATE,
+        defaultValue: sequelize_1.DataTypes.NOW
     },
     updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW
+        type: sequelize_1.DataTypes.DATE,
+        defaultValue: sequelize_1.DataTypes.NOW
     },
 }, {
-    sequelize,
+    sequelize: sequelize_2.default,
     tableName: 'groups',
     modelName: 'Group',
     timestamps: true,
     underscored: true,
 });
-export default Group;
+exports.default = Group;

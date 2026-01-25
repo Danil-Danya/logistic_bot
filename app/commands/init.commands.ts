@@ -16,7 +16,6 @@ import {
 
 import { 
     handleSearchCommand, 
-    handleSearchSelection, 
     handleUserMessageForSearch 
 } from "../handlers/search.handler";
 
@@ -35,7 +34,6 @@ const initCommands = async (bot: Bot) => {
         bot.callbackQuery("newsletter", handleNewsletterStart);
         bot.callbackQuery(/^subscribe_folder_(.+)$/, handleSubscribeFolderCallback);
         bot.callbackQuery("search", handleSearchCommand);
-        bot.callbackQuery(/search_(all|group_)/, handleSearchSelection);
 
         bot.on("message:text", async (ctx, next) => {
             if (ctx.chat.type !== "private") {
@@ -54,6 +52,8 @@ const initCommands = async (bot: Bot) => {
         });
 
         bot.on("message:text", async (ctx) => {
+            console.log(123);
+            
             if (ctx.chat.type === "group" || ctx.chat.type === "supergroup") {
                 await handleGroupMessage(ctx);
             }

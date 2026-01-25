@@ -1,81 +1,74 @@
-import { Context, InlineKeyboard } from "grammy";
+import { Context } from "grammy";
 import generateGroupKeyboard from "../keyboards/group.keyboard";
-import Message from "../../core/database/models/message.model";
-import { Op } from "sequelize";
+import GeoService from "../services/geo.service";
+import MessageService from "../services/message.service";
 
 const userSearchState = new Map<number, { isAll: boolean; groupId: string | null }>();
 
+function parseOriginDestination(input: string) {
+    const cleaned = input.replace(/->|→|<-|<−|-/g, " ");
+    const parts = cleaned.split(/\s+/).filter(Boolean);
+
+    if (parts.length < 2) return null;
+
+    const origin = parts[0];
+    const destination = parts[parts.length - 1];
+
+    return { origin, destination };
+}
+
 export const handleSearchCommand = async (ctx: Context) => {
-    const keyboard = await generateGroupKeyboard();
-    await ctx.reply("Выберите группу, по которой искать грузы:", { reply_markup: keyboard });
+    await ctx.reply("Введите город/страну (откуда → куда) для поиска по всем подписанным группам:");
 };
-
-export const handleSearchSelection = async (ctx: Context) => {
-    const data = ctx.callbackQuery?.data;
-    if (!data) {
-        console.log("Нет callbackQuery.data");
-        return;
-    }
-
-    const isAll = data === "search_all";
-    let groupId: string | null = null;
-
-    if (!isAll) {
-        const parts = data.split("search_group_");
-        groupId = parts.length > 1 ? parts[1] : null;
-    }
-
-    userSearchState.set(ctx.from!.id, { isAll, groupId });
-
-    await ctx.reply(
-        isAll
-            ? "Введите ключевые слова для поиска по всем группам:"
-            : `Введите ключевые слова для поиска в выбранной группе (${groupId}):`
-    );
-};
-
 
 export const handleUserMessageForSearch = async (ctx: Context) => {
-    const userId = ctx.from?.id;
-    if (!userId) return;
-
-    const state = userSearchState.get(userId);
-    if (!state) {
-        return; 
-    }
-
     const query = ctx.message?.text?.trim();
-    if (!query) {
-        return ctx.reply("⚠️ Введите текст запроса для поиска.");
+    if (!query) return ctx.reply("⚠️ Введите текст запроса для поиска.");
+
+    const parsed = parseOriginDestination(query);
+    if (!parsed) return ctx.reply("⚠️ Нужен формат: откуда → куда (например: Ташкент Москва)");
+
+    const { origin, destination } = parsed;
+
+    const originGeo = await GeoService.findCountriesAndCities(origin);
+    const destinationGeo = await GeoService.findCountriesAndCities(destination);
+
+    const originCities = originGeo.countryMatches.length
+        ? await GeoService.getAllCitiesByCountry(originGeo.countryMatches[0].id)
+        : originGeo.cityMatches
+            .filter(c => c && c.name_rus)
+            .filter(c => c.name_rus.toLowerCase().includes(origin.toLowerCase()));
+
+    const destinationCities = destinationGeo.countryMatches.length
+        ? await GeoService.getAllCitiesByCountry(destinationGeo.countryMatches[0].id)
+        : destinationGeo.cityMatches
+            .filter(c => c && c.name_rus)
+            .filter(c => c.name_rus.toLowerCase().includes(destination.toLowerCase()));
+
+    if (!originCities.length && !destinationCities.length) {
+        return ctx.reply("❌ Не найдено городов/стран по вашему запросу.");
     }
-    
 
-    const where = state.isAll
-        ? { text: { [Op.iLike]: `%${query}%` } }
-        : { group_id: state.groupId?.toString(), text: { [Op.iLike]: `%${query}%` } };
+    const originTokens = originCities.map(c => c.name_rus);
+    const destinationTokens = destinationCities.map(c => c.name_rus);
 
-    const results = await Message.findAll({ where, limit: 10 });
+    const results = await MessageService.searchMessages(originTokens, destinationTokens);
 
     if (!results.length) {
-        userSearchState.delete(userId);
         return ctx.reply("❌ Ничего не найдено.");
     }
 
     await ctx.reply(`🔎 Найдено сообщений: ${results.length}`);
 
     for (const res of results) {
-        try {
-            await ctx.api.forwardMessage(
-                ctx.chat!.id,         
-                Number(res.dataValues.group_id),  
-                Number(res.dataValues.message_id)  
-            );
-        }
-        catch (err: any) {
-            console.error("Ошибка пересылки:", err.message);
-        }
+        await ctx.api.forwardMessage(
+            ctx.chat!.id, 
+            Number(res.dataValues.group_id), 
+            Number(res.dataValues.message_id)
+        );
     }
 
-    userSearchState.delete(userId);
     await ctx.reply("✅ Поиск завершён.");
 };
+
+

@@ -7,7 +7,7 @@ const express_1 = require("express");
 const folder_controller_1 = __importDefault(require("../controllers/folder.controller"));
 const router = (0, express_1.Router)();
 router.post("/folders", folder_controller_1.default.create);
-router.post("/folders/add-group", folder_controller_1.default.update);
+router.post("/folders/add-group", folder_controller_1.default.addGroup);
 router.put("/folders/:id", folder_controller_1.default.update);
 router.patch("/folders/:id", folder_controller_1.default.edit);
 router.delete("/folders/:id", folder_controller_1.default.delete);

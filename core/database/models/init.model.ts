@@ -6,8 +6,10 @@ import Group from "./group.model";
 import Message from "./message.model";
 import Folder from "./folders.model";
 import Tariff from "./tariffs.model";
+import Countries from "./countries.model";
+import Cities from "./cities.model";
 
-import FolderToGroups from "./FolderToGroups.model";
+import FolderToGroups from "./folderToGroups.model";
 import FolderToUser from "./folderToUser.model";
 import TariffToUser from "./tariffToUser.model";
 
@@ -67,6 +69,17 @@ User.belongsToMany(Tariff, {
     otherKey: 'tariff_id',
     as: 'tariffs',
 });
+
+Countries.hasMany(Cities, {
+    foreignKey: 'country_id',
+    as: 'cities'
+});
+
+Cities.belongsTo(Countries, {
+    foreignKey: 'country_id',
+    as: 'country'
+});
+
 
 
 export {

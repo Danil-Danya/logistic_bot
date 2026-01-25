@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const grammy_1 = require("grammy");
+const generateMenuKeyboard = () => {
+    const startKeyboard = new grammy_1.InlineKeyboard()
+        .text('🔍 Поиск груза', 'search').row()
+        .text('📂 Рассылка', 'newsletter').row()
+        .text('⚙️ Настройки', 'settings');
+    return startKeyboard;
+};
+exports.default = generateMenuKeyboard;

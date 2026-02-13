@@ -543,3 +543,378 @@
  */
 
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Country:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *           description: Уникальный идентификатор страны
+ *           example: "550e8400-e29b-41d4-a716-446655440000"
+ *         name_rus:
+ *           type: string
+ *           description: Название страны на русском языке
+ *           example: "Россия"
+ *         name_uzb:
+ *           type: string
+ *           description: Название страны на узбекском языке
+ *           example: "Rossiya"
+ *         name_eng:
+ *           type: string
+ *           description: Название страны на английском языке
+ *           example: "Russia"
+ *         keywords:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Ключевые слова для поиска страны
+ *           example: ["Россия", "Rossiya", "Russia"]
+ *       required:
+ *         - name_rus
+ *         - name_uzb
+ *         - name_eng
+ */
+
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     City:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           format: uuid
+ *           description: Уникальный идентификатор города
+ *           example: "550e8400-e29b-41d4-a716-446655440001"
+ *         name_rus:
+ *           type: string
+ *           description: Название города на русском языке
+ *           example: "Томск"
+ *         name_uzb:
+ *           type: string
+ *           description: Название города на узбекском языке
+ *           example: "Tomsk"
+ *         name_eng:
+ *           type: string
+ *           description: Название города на английском языке
+ *           example: "Tomsk"
+ *         keywords:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Ключевые слова для поиска города
+ *           example: ["Томск", "Tomsk", "Tomsk city"]
+ *         country_id:
+ *           type: string
+ *           format: uuid
+ *           description: Идентификатор страны, к которой относится город
+ *           example: "550e8400-e29b-41d4-a716-446655440000"
+ *       required:
+ *         - name_rus
+ *         - name_uzb
+ *         - name_eng
+ *         - country_id
+ */
+
+
+
+/**
+ * @swagger
+ * /cities:
+ *   post:
+ *     summary: Создать новый город
+ *     tags: [Cities]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               country_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Идентификатор страны, к которой относится город
+ *                 example: "550e8400-e29b-41d4-a716-446655440000"
+ *               name_rus:
+ *                 type: string
+ *                 description: Название города на русском языке
+ *                 example: "Томск"
+ *               name_uzb:
+ *                 type: string
+ *                 description: Название города на узбекском языке
+ *                 example: "Tomsk"
+ *               name_eng:
+ *                 type: string
+ *                 description: Название города на английском языке
+ *                 example: "Tomsk"
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Ключевые слова для поиска города
+ *                 example: ["Томск", "Tomsk", "Tomsk city"]
+ *             required:
+ *               - country_id
+ *               - name_rus
+ *               - name_uzb
+ *               - name_eng
+ *     responses:
+ *       201:
+ *         description: Созданный город
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/City'
+ *       400:
+ *         description: Некорректные данные
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+
+
+/**
+ * @swagger
+ * /cities/{id}:
+ *   put:
+ *     summary: Обновить существующий город
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор города
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               country_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Идентификатор страны, к которой относится город
+ *                 example: "550e8400-e29b-41d4-a716-446655440000"
+ *               name_rus:
+ *                 type: string
+ *                 description: Название города на русском языке
+ *                 example: "Томск"
+ *               name_uzb:
+ *                 type: string
+ *                 description: Название города на узбекском языке
+ *                 example: "Tomsk"
+ *               name_eng:
+ *                 type: string
+ *                 description: Название города на английском языке
+ *                 example: "Tomsk"
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Ключевые слова для поиска города
+ *                 example: ["Томск", "Tomsk", "Tomsk city"]
+ *     responses:
+ *       201:
+ *         description: Обновленный город
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/City'
+ *       400:
+ *         description: Некорректные данные
+ *       404:
+ *         description: Город с указанным ID не найден
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+
+
+/**
+ * @swagger
+ * /cities/{id}:
+ *   patch:
+ *     summary: Частично обновить город
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор города
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               country_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Идентификатор страны, к которой относится город
+ *                 example: "550e8400-e29b-41d4-a716-446655440000"
+ *               name_rus:
+ *                 type: string
+ *                 description: Название города на русском языке
+ *                 example: "Томск"
+ *               name_uzb:
+ *                 type: string
+ *                 description: Название города на узбекском языке
+ *                 example: "Tomsk"
+ *               name_eng:
+ *                 type: string
+ *                 description: Название города на английском языке
+ *                 example: "Tomsk"
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Ключевые слова для поиска города
+ *                 example: ["Томск", "Tomsk", "Tomsk city"]
+ *     responses:
+ *       201:
+ *         description: Частично обновленный город
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/City'
+ *       400:
+ *         description: Некорректные данные
+ *       404:
+ *         description: Город с указанным ID не найден
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+
+
+/**
+ * @swagger
+ * /cities/{id}:
+ *   delete:
+ *     summary: Удалить город по ID
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор города
+ *     responses:
+ *       200:
+ *         description: Город успешно удален
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/City'
+ *       404:
+ *         description: Город с указанным ID не найден
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+
+
+/**
+ * @swagger
+ * /cities/{id}:
+ *   get:
+ *     summary: Получить город по ID
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор города
+ *     responses:
+ *       200:
+ *         description: Город найден
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/City'
+ *       404:
+ *         description: Город с указанным ID не найден
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+
+
+/**
+ * @swagger
+ * /cities:
+ *   get:
+ *     summary: Получить список городов с пагинацией и фильтрацией
+ *     tags: [Cities]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Номер страницы для пагинации
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Количество элементов на странице
+ *       - in: query
+ *         name: where
+ *         schema:
+ *           type: string
+ *         description: Значение для фильтрации по определённому полю
+ *       - in: query
+ *         name: where_field
+ *         schema:
+ *           type: string
+ *         description: Поле, по которому применяется фильтр
+ *       - in: query
+ *         name: order_by
+ *         schema:
+ *           type: string
+ *         description: Поле для сортировки
+ *       - in: query
+ *         name: order_type
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *         description: Тип сортировки
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Значение для поиска по определённому полю
+ *       - in: query
+ *         name: search_field
+ *         schema:
+ *           type: string
+ *         description: Поле для поиска
+ *     responses:
+ *       200:
+ *         description: Список городов с пагинацией
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/City'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */

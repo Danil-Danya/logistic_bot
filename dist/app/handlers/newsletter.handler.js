@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleNewsletterStart = exports.newsletterHandler = void 0;
 const user_service_1 = __importDefault(require("../services/user.service"));
 const newsletter_state_1 = __importDefault(require("../states/newsletter.state"));
+const node_cron_1 = __importDefault(require("node-cron"));
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const handleNewsletterStart = async (ctx) => {
     const chatId = ctx.chat?.id.toString();
@@ -17,7 +18,7 @@ const handleNewsletterStart = async (ctx) => {
     });
 };
 exports.handleNewsletterStart = handleNewsletterStart;
-const newsletterHandler = async (ctx) => {
+const runNewsletter = async (ctx) => {
     const chatId = ctx.chat?.id.toString();
     const message = ctx.message?.text;
     if (!message) {
@@ -61,6 +62,12 @@ const newsletterHandler = async (ctx) => {
         `Успешно: <b>${success}</b>\n` +
         `Ошибок: <b>${failed}</b>`, {
         parse_mode: "HTML",
+    });
+};
+const newsletterHandler = async (ctx) => {
+    await runNewsletter(ctx);
+    node_cron_1.default.schedule('0 * * * *', async () => {
+        await runNewsletter(ctx);
     });
 };
 exports.newsletterHandler = newsletterHandler;

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const menu_keyboard_1 = __importDefault(require("../keyboards/menu.keyboard"));
 const user_service_1 = __importDefault(require("../services/user.service"));
 const folder_handler_1 = require("../handlers/folder.handler");
-const MAX_SUBSCRIPTIONS = 2;
+const MAX_SUBSCRIPTIONS = 1;
 const startCommand = async (ctx) => {
     try {
         await user_service_1.default.createUser(ctx);

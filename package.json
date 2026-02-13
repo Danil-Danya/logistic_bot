@@ -10,7 +10,8 @@
     "dev": "nodemon --watch './**/*.ts' --exec \"node -r ts-node/register -r tsconfig-paths/register index.ts\"",
     "build": "tsc",
     "start": "node dist/index.js",
-    "seed": "node dist/core/database/seeders/init.seed.js"
+    "seed": "node dist/core/database/seeders/init.seed.js",
+    "migrate": "node dist/core/database/migrations/init.migrate.js"
   },
   "dependencies": {
     "axios": "^1.13.2",
@@ -20,6 +21,7 @@
     "express": "^5.1.0",
     "grammy": "^1.38.3",
     "ioredis": "^5.8.2",
+    "node-cron": "^4.2.1",
     "nodemon": "^3.1.10",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",

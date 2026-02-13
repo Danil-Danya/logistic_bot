@@ -10,12 +10,13 @@ class Cities extends sequelize_1.Model {
     name_rus;
     name_eng;
     name_uzb;
+    keywords;
     country_id;
 }
 Cities.init({
     id: {
         type: sequelize_1.DataTypes.UUID,
-        allowNull: false,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
         primaryKey: true
     },
     name_rus: {
@@ -30,6 +31,10 @@ Cities.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
+    keywords: {
+        type: sequelize_1.DataTypes.ARRAY(sequelize_1.DataTypes.STRING),
+        allowNull: true
+    },
     country_id: {
         type: sequelize_1.DataTypes.UUID,
         allowNull: false
@@ -39,5 +44,16 @@ Cities.init({
     tableName: 'cities',
     modelName: 'Cities',
     timestamps: false,
+    hooks: {
+        beforeSave: (model) => {
+            if (Array.isArray(model.keywords)) {
+                model.keywords = model.keywords
+                    .filter((x) => typeof x === "string")
+                    .map((x) => x.trim())
+                    .filter((x) => x.length > 0)
+                    .map((x) => x.toLowerCase());
+            }
+        }
+    }
 });
 exports.default = Cities;

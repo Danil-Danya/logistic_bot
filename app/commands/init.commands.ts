@@ -3,6 +3,7 @@ import startCommand from "./start.commands";
 
 import sequelize from "../../plugins/sequelize";
 import newsletterState from "app/states/newsletter.state";
+import langCallback from "app/handlers/lang.handller";
 
 import { handleBotAddedToGroup } from "../handlers/group.handler";
 import { handleGroupMessage } from "../handlers/message.handler";
@@ -19,6 +20,15 @@ import {
     handleUserMessageForSearch 
 } from "../handlers/search.handler";
 
+import {
+    handleTariffsMenu,
+    handleMyTariff,
+    handleBuyTariff,
+    handleTariffPay,
+    handleMainMenu
+} from "app/handlers/tariff.handler";
+
+
 const initCommands = async (bot: Bot) => {
     try {
         bot.api.setMyCommands([
@@ -29,11 +39,20 @@ const initCommands = async (bot: Bot) => {
 
         bot.command("start", startCommand);
 
+        bot.callbackQuery(/^lang:(rus|uzb|eng)$/, langCallback);
+
         bot.on("my_chat_member", handleBotAddedToGroup);
 
-        bot.callbackQuery("newsletter", handleNewsletterStart);
         bot.callbackQuery(/^subscribe_folder_(.+)$/, handleSubscribeFolderCallback);
+        bot.callbackQuery("newsletter", handleNewsletterStart);
         bot.callbackQuery("search", handleSearchCommand);
+
+        bot.callbackQuery("tariffs", handleTariffsMenu);
+        bot.callbackQuery("tariffs_my", handleMyTariff);
+        bot.callbackQuery("tariffs_buy", handleBuyTariff);
+
+        bot.callbackQuery(/^tariff_pay:(payme|click):(.+)$/, handleTariffPay);
+        bot.callbackQuery("main_menu", handleMainMenu);
 
         bot.on("message:text", async (ctx, next) => {
             if (ctx.chat.type !== "private") {
@@ -52,8 +71,6 @@ const initCommands = async (bot: Bot) => {
         });
 
         bot.on("message:text", async (ctx) => {
-            console.log(123);
-            
             if (ctx.chat.type === "group" || ctx.chat.type === "supergroup") {
                 await handleGroupMessage(ctx);
             }

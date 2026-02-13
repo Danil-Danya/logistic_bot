@@ -13,6 +13,7 @@ class User extends sequelize_1.Model {
     chat_id;
     avatar_path;
     role;
+    lang;
     created_at;
     updated_at;
 }
@@ -48,6 +49,10 @@ User.init({
         type: sequelize_1.DataTypes.ENUM('USER', 'STAFF', 'ADMIN'),
         allowNull: false,
         defaultValue: 'USER',
+    },
+    lang: {
+        type: sequelize_1.DataTypes.ENUM('rus', 'eng', 'uzb'),
+        allowNull: true,
     },
     created_at: {
         type: sequelize_1.DataTypes.DATE,

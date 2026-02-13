@@ -1,4 +1,5 @@
 import { Context } from "grammy";
+import { t, Lang } from "core/i18n.init";
 
 import userService from "../services/user.service";
 import folderService from "../services/folder.service";
@@ -6,13 +7,14 @@ import folderService from "../services/folder.service";
 import generateFolderKeyboard from "../keyboards/folder.keyboard";
 import generateMenuKeyboard from "../keyboards/menu.keyboard";
 
-const MAX_SUBSCRIPTIONS = 2;
+const MAX_SUBSCRIPTIONS = 1;
 
 const handleSubscribeFolder = async (ctx: Context) => {
     const chatId: string = ctx.chat?.id.toString()!;
-
+    
     const folders: any = await folderService.getAllFolders();
     const user: any = await userService.getUserByChatId(chatId);
+    const lang: Lang = user.dataValues.lang;
 
     const subscribedFolders: number = user.folders.length;
     const availableToSubscribe: number = Math.max(MAX_SUBSCRIPTIONS - subscribedFolders, 0);
@@ -31,29 +33,34 @@ const handleSubscribeFolder = async (ctx: Context) => {
         .join("\n\n");
 
     const replyOptions: any = {
-        parse_mode: "HTML",
+        parse_mode: "HTML"
     };
 
     if (availableToSubscribe > 0) {
         replyOptions.reply_markup = generateFolderKeyboard(availableFolders);
     }
 
-    await ctx.reply(
-        `📂 <b>Доступные папки для подписки:</b>\n\n${foldersText}\n\n` +
-        `ℹ️ <b>Информация о подписке</b>\n` +
-        `Вы подписаны на: <b>${subscribedFolders}</b>\n` +
-        `Доступно для подписки: <b>${availableToSubscribe}</b> из <b>${MAX_SUBSCRIPTIONS}</b>\n\n` +
-        `Выберите папку из клавиатуры ниже, чтобы подписаться на рассылку объявлений.`,
-        replyOptions
-    );
-}
+    const message =
+        `${t(lang, "folders_available_title")}\n\n${foldersText}\n\n` +
+        `${t(lang, "subscription_info_title")}\n` +
+        `${t(lang, "subscribed_count").replace("{subscribed}", String(subscribedFolders))}\n` +
+        `${t(lang, "available_to_subscribe")
+            .replace("{available}", String(availableToSubscribe))
+            .replace("{max}", String(MAX_SUBSCRIPTIONS))}\n\n` +
+        `${t(lang, "choose_folder_hint")}`;
+
+    await ctx.reply(message, replyOptions);
+};
 
 const handleSubscribeFolderCallback = async (ctx: Context) => {
     const data = ctx.callbackQuery?.data;
+    const chatId: string = ctx.chat?.id.toString()!;
+    const user: any = await userService.getUserByChatId(chatId);
+
+    const lang: Lang = user.dataValues.lang || "ru";
 
     if (!data) {
-        console.log("Нет callbackQuery.data");
-        await ctx.reply("Произошла ошибка. Попробуйте еще раз.");
+        await ctx.reply(t(lang, "error_try_again"));
         return;
     }
 
@@ -61,33 +68,29 @@ const handleSubscribeFolderCallback = async (ctx: Context) => {
     const folderId = parts.length > 1 ? parts[1] : null;
 
     if (!folderId) {
-        console.log("Некорректный формат callbackQuery.data");
-        await ctx.reply("Произошла ошибка. Попробуйте еще раз.");
+        await ctx.reply(t(lang, "error_try_again"));
         return;
     }
 
-    const chatId: string = ctx.chat?.id.toString()!;
-
-    const replyOptions: any = {
-        parse_mode: "HTML",
-        reply_markup: generateMenuKeyboard(),
-    };
-    
-    const user: any = await userService.getUserByChatId(chatId);
-     if (user.folders.length >= MAX_SUBSCRIPTIONS) {
-        await ctx.reply(
-            `⚠️ Вы достигли максимального количества подписок (${MAX_SUBSCRIPTIONS}).`,
-            replyOptions
-        );
-        return;
-    }
-    
     await userService.addToUserFolder(user.dataValues.id, folderId);
 
-    await ctx.reply(`✅ Вы успешно подписались на папку!`);
-}
+    await ctx.reply(t(lang, "subscribed_success"));
+
+    const subscribedUser: any = await userService.getUserByChatId(chatId);
+    
+    if (subscribedUser.folders.length === MAX_SUBSCRIPTIONS) {
+        await ctx.reply(
+            t(lang, "max_subscriptions_reached").replace("{max}", String(MAX_SUBSCRIPTIONS))
+        );
+
+        await ctx.reply(t(lang, "main_menu"), {
+            parse_mode: "HTML",
+            reply_markup: generateMenuKeyboard(lang)
+        });
+    }
+};
 
 export {
     handleSubscribeFolder,
     handleSubscribeFolderCallback
-}
+};

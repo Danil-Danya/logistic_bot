@@ -1,0 +1,67 @@
+{
+    "welcome": "<b>YUKO Logistic Bot’ga xush kelibsiz</b> 🚛\n\nUshbu bot logistika e’lonlarini qidirish va joylash uchun mo‘ljallangan.\n\nIltimos, quyidagi ko‘rsatmalarga diqqat bilan amal qiling 👇",
+    "no_folders": "⚠️ Ko‘rinishidan, sizda hali obuna bo‘lish uchun papkalar yo‘q.\n\nIltimos, quyidagi xabardan papkalarga obuna bo‘ling 👇",
+    "main_menu": "YUKO Logistic Bot’ning asosiy menyusiga xush kelibsiz! 🚛\n\nQuyidagi funksiyalardan foydalanishingiz mumkin:\n\n🔍 <b>Yuk qidirish</b> — parametrlar bo‘yicha mos e’lonlarni toping.\n📂 <b>Tarqatma</b> — papkalarga obuna bo‘ling va yangi e’lonlar haqida bildirishnomalar oling.\n⚙️ <b>Sozlamalar</b> — obunalar, til va boshqa parametrlarni boshqaring.\n\nKerakli bo‘limni quyidagi tugmalar orqali tanlang.",
+
+    "folders_available_title": "📂 <b>Obuna bo‘lish uchun mavjud papkalar:</b>",
+    "subscription_info_title": "ℹ️ <b>Obuna haqida ma’lumot</b>",
+    "subscribed_count": "Siz obuna bo‘lgansiz: <b>{subscribed}</b>",
+    "available_to_subscribe": "Obuna bo‘lish mumkin: <b>{available}</b> / <b>{max}</b>",
+    "choose_folder_hint": "E’lonlar tarqatmasiga obuna bo‘lish uchun quyidagi klaviaturadan papkani tanlang.",
+
+    "error_try_again": "Xatolik yuz berdi. Qaytadan urinib ko‘ring.",
+    "subscribed_success": "✅ Siz papkaga muvaffaqiyatli obuna bo‘ldingiz!",
+    "max_subscriptions_reached": "⚠️ Siz obunalar uchun maksimal limitga yetdingiz ({max}).",
+
+    "newsletter_title": "📂 <b>Tarqatma</b>",
+    "newsletter_start_hint": "Papkangizdagi guruhlarga yuboriladigan xabarni jo‘nating.",
+    "newsletter_start_warn": "❗ Xabar siz obuna bo‘lgan <b>barcha guruhlarga</b> yuboriladi.",
+
+    "newsletter_no_folder_subscriptions": "❌ Sizda papkalarga obunalar yo‘q.",
+    "newsletter_no_groups_in_folders": "❌ Tanlangan papkalarda guruhlar yo‘q.",
+
+    "newsletter_done_title": "✅ Tarqatma yakunlandi",
+    "newsletter_done_success": "Muvaffaqiyatli: <b>{success}</b>",
+    "newsletter_done_failed": "Xatolar: <b>{failed}</b>",
+
+    "search_enter_prompt": "Barcha obuna bo‘lgan guruhlarda qidirish uchun shahar/davlat kiriting (qayerdan → qayerga):",
+    "search_empty_query": "⚠️ Qidiruv uchun matn kiriting.",
+    "search_wrong_format": "⚠️ Format kerak: qayerdan → qayerga (masalan: Toshkent Moskva)",
+    "search_geo_not_found": "❌ So‘rovingiz bo‘yicha shahar/davlat topilmadi.",
+    "search_no_results": "❌ Hech narsa topilmadi.",
+    "search_sent_last_messages": "🔎 Oxirgi {count} ta xabar yuborildi",
+
+    "btn_my_tariff": "👤 Mening tarifim",
+    "btn_buy_tariff": "💳 Tarif sotib olish",
+    "btn_back_tariffs": "⬅️ Tariflarga qaytish",
+    "btn_payme": "💳 Payme orqali to‘lash",
+    "btn_click": "💳 Click orqali to‘lash",
+
+    "tariffs_menu_title": "💳 <b>Tariflar</b>\n\nAmalni tanlang:",
+    "my_tariff_title": "👤 <b>Mening tarifim</b>",
+    "my_tariff_name": "Bepul bazaviy 1-haftalik tarif",
+    "my_tariff_desc": "Qidirish va oxirgi xabarlarni ko‘rish imkoniyati.\nTarqatma va kengaytirilgan funksiyalar pullik tariflarda.",
+
+    "buy_tariff_title": "💳 <b>Tarif sotib olish</b>\n\nTarif va to‘lov turini tanlang:",
+    "payment_maintenance": "To‘lov xizmati texnik sozlash jarayonida.",
+
+    "tariff_weekly_title": "PREMIUM — 1 hafta",
+    "tariff_weekly_desc": "7 kun davomida xizmatning barcha funksiyalariga to‘liq kirish.",
+    "tariff_weekly_price": "Narx: <b>129 000 so‘m</b>",
+
+    "tariff_monthly_title": "PREMIUM — 1 oy",
+    "tariff_monthly_desc": "30 kun davomida xizmatning barcha funksiyalariga to‘liq kirish.\n\n💰 Haftalik to‘lovga nisbatan <b>69%</b> gacha tejash.",
+    "tariff_monthly_price": "Narx: <b>160 000 so‘m</b>",
+
+    "tariff_yearly_title": "PREMIUM — 1 yil",
+    "tariff_yearly_desc": "12 oy davomida xizmatning barcha funksiyalariga to‘liq kirish.\n\n🔥 Haftalik to‘lovga nisbatan <b>92%</b> gacha tejash.",
+    "tariff_yearly_price": "Narx: <b>499 000 so‘m</b>",
+
+    "btn_back_main_menu": "⬅️ Asosiy menyuga qaytish",
+
+    "btn_search": "🔍 Yuk qidirish",
+    "btn_newsletter": "📂 Tarqatma",
+    "btn_tariffs": "💳 Tariflar",
+    "btn_sponsors": "🤝 Homiylar",
+    "btn_settings": "⚙️ Sozlamalar"
+}

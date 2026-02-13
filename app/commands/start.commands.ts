@@ -1,53 +1,49 @@
 import { Context } from "grammy";
-
-import generateMenuKeyboard from "../keyboards/menu.keyboard";
-import userService from "../services/user.service";
+import { t, Lang } from "core/i18n.init";
 import { handleSubscribeFolder } from "../handlers/folder.handler";
 
-const MAX_SUBSCRIPTIONS = 2;
+import generateLangKeyboard from "app/keyboards/lang.keyboard";
+import generateMenuKeyboard from "../keyboards/menu.keyboard";
+import userService from "../services/user.service";
+
+const MAX_SUBSCRIPTIONS = 1;
 
 const startCommand = async (ctx: Context) => {
     try {
         await userService.createUser(ctx);
 
-        await ctx.reply(
-            `<b>Добро пожаловать в YUKO Logistic Bot</b> 🚛\n\n` +
-            `Данный бот предназначен для поиска и публикации логистических объявлений.\n\n` +
-            `Пожалуйста, внимательно следуйте инструкциям ниже 👇`,
-            {
-                parse_mode: "HTML",
-            }
-        );
-
         const chatId: string = ctx.chat?.id.toString()!;
         const user: any = await userService.getUserByChatId(chatId);
-
-        if (user.folders.length < MAX_SUBSCRIPTIONS) {
+        
+        if (!user.dataValues.lang) {
             await ctx.reply(
-                `⚠️ Похоже, у вас еще нет папок для подписки на рассылки.\n\n` +
-                `Пожалуйста, Подпишитесь на папки из сообщение ниже 👇`,
+                'Выберете язык / Select language', 
                 {
-                    parse_mode: "HTML",
+                    reply_markup: generateLangKeyboard(),
                 }
             );
 
+            return;
+        }
+
+        const lang: Lang = user.dataValues.lang;
+
+        await ctx.reply(
+            t(lang, "welcome", { name: ctx.from?.first_name as string }),
+            { parse_mode: "HTML" }
+        );
+
+        if (user.folders.length < MAX_SUBSCRIPTIONS) {
+            await ctx.reply(t(lang, "no_folders"), { parse_mode: "HTML" });
             await handleSubscribeFolder(ctx);
         }
         else {
-            await ctx.reply(
-                `Добро пожаловать в главное меню YUKO Logistic Bot! 🚛\n\n` +
-                `Вы можете воспользоваться следующими функциями:\n\n` +
-                `🔍 <b>Поиск груза</b> — найдите подходящие объявления по параметрам.\n` +
-                `📂 <b>Рассылка</b> — подпишитесь на папки и получайте уведомления о новых объявлениях.\n` +
-                `⚙️ <b>Настройки</b> — управляйте подписками, языком и другими параметрами.\n\n` +
-                `Выберите нужный раздел с помощью кнопок ниже.`,
-                {
-                    parse_mode: 'HTML',
-                    reply_markup: generateMenuKeyboard()
-                }
-            );
+            await ctx.reply(t(lang, "main_menu"), {
+                parse_mode: "HTML",
+                reply_markup: generateMenuKeyboard(lang),
+            });
         }
-    } 
+    }
     catch (error) {
         console.error("Ошибка в /start:", error);
         await ctx.reply("Произошла ошибка при запуске. Попробуйте позже.");

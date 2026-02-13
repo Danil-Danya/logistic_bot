@@ -11,6 +11,7 @@ interface UserAttributes {
     chat_id: string;
     avatar_path: string;
     role: string;
+    lang?: string;
 
     created_at?: Date;
     updated_at?: Date;
@@ -31,6 +32,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
     public chat_id!: string;
     public avatar_path!: string;
     public role!: string;
+    public lang!: string;
 
     public readonly created_at!: Date;
     public readonly updated_at!: Date;
@@ -74,6 +76,11 @@ User.init({
         type: DataTypes.ENUM('USER', 'STAFF', 'ADMIN'),
         allowNull: false,
         defaultValue: 'USER',
+    },
+
+    lang: {
+        type: DataTypes.ENUM('rus', 'eng', 'uzb'),
+        allowNull: true,
     },
 
     created_at: {

@@ -10,11 +10,12 @@ class Countries extends sequelize_1.Model {
     name_rus;
     name_eng;
     name_uzb;
+    keywords;
 }
 Countries.init({
     id: {
         type: sequelize_1.DataTypes.UUID,
-        allowNull: false,
+        //defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
     name_rus: {
@@ -29,10 +30,25 @@ Countries.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false
     },
+    keywords: {
+        type: sequelize_1.DataTypes.ARRAY(sequelize_1.DataTypes.STRING),
+        allowNull: true
+    }
 }, {
     sequelize: sequelize_2.default,
     tableName: 'countries',
     modelName: 'Countries',
     timestamps: false,
+    hooks: {
+        beforeSave: (model) => {
+            if (Array.isArray(model.keywords)) {
+                model.keywords = model.keywords
+                    .filter((x) => typeof x === "string")
+                    .map((x) => x.trim())
+                    .filter((x) => x.length > 0)
+                    .map((x) => x.toLowerCase());
+            }
+        }
+    }
 });
 exports.default = Countries;

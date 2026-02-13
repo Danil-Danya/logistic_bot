@@ -1,0 +1,67 @@
+{
+    "welcome": "<b>Welcome to YUKO Logistic Bot</b> 🚛\n\nThis bot is designed to search and publish logistics listings.\n\nPlease follow the instructions below carefully 👇",
+    "no_folders": "⚠️ It looks like you don’t have any folders to subscribe to yet.\n\nPlease subscribe to folders from the message below 👇",
+    "main_menu": "Welcome to the main menu of YUKO Logistic Bot! 🚛\n\nYou can use the following features:\n\n🔍 <b>Cargo search</b> — find suitable listings by parameters.\n📂 <b>Newsletter</b> — subscribe to folders and receive notifications about new listings.\n⚙️ <b>Settings</b> — manage subscriptions, language, and other options.\n\nChoose the section you need using the buttons below.",
+
+    "folders_available_title": "📂 <b>Available folders to subscribe:</b>",
+    "subscription_info_title": "ℹ️ <b>Subscription info</b>",
+    "subscribed_count": "You are subscribed to: <b>{subscribed}</b>",
+    "available_to_subscribe": "Available to subscribe: <b>{available}</b> out of <b>{max}</b>",
+    "choose_folder_hint": "Select a folder using the keyboard below to subscribe to listing updates.",
+
+    "error_try_again": "An error occurred. Please try again.",
+    "subscribed_success": "✅ You have successfully subscribed to the folder!",
+    "max_subscriptions_reached": "⚠️ You have reached the maximum number of subscriptions ({max}).",
+
+    "newsletter_title": "📂 <b>Newsletter</b>",
+    "newsletter_start_hint": "Send the message you want to broadcast to the groups in your folders.",
+    "newsletter_start_warn": "❗ The message will be sent to <b>all groups</b> you are subscribed to.",
+
+    "newsletter_no_folder_subscriptions": "❌ You don’t have any folder subscriptions.",
+    "newsletter_no_groups_in_folders": "❌ There are no groups in the selected folders.",
+
+    "newsletter_done_title": "✅ Newsletter completed",
+    "newsletter_done_success": "Success: <b>{success}</b>",
+    "newsletter_done_failed": "Failed: <b>{failed}</b>",
+
+    "search_enter_prompt": "Enter city/country (from → to) to search across all subscribed groups:",
+    "search_empty_query": "⚠️ Please enter a search query.",
+    "search_wrong_format": "⚠️ Required format: from → to (example: Tashkent Moscow)",
+    "search_geo_not_found": "❌ No cities/countries found for your query.",
+    "search_no_results": "❌ Nothing found.",
+    "search_sent_last_messages": "🔎 Sent last {count} messages",
+
+    "btn_my_tariff": "👤 My plan",
+    "btn_buy_tariff": "💳 Buy a plan",
+    "btn_back_tariffs": "⬅️ Back to plans",
+    "btn_payme": "💳 Pay with Payme",
+    "btn_click": "💳 Pay with Click",
+
+    "tariffs_menu_title": "💳 <b>Plans</b>\n\nChoose an action:",
+    "my_tariff_title": "👤 <b>My plan</b>",
+    "my_tariff_name": "Basic free 1-week plan",
+    "my_tariff_desc": "Access to search and view the latest messages.\nNewsletter and advanced features are available in paid plans.",
+
+    "buy_tariff_title": "💳 <b>Purchase plan</b>\n\nChoose a plan and payment method:",
+    "payment_maintenance": "Payment service is under maintenance.",
+
+    "tariff_weekly_title": "PREMIUM — 1 week",
+    "tariff_weekly_desc": "Full access to all service features for 7 days.",
+    "tariff_weekly_price": "Price: <b>129,000 UZS</b>",
+
+    "tariff_monthly_title": "PREMIUM — 1 month",
+    "tariff_monthly_desc": "Full access to all service features for 30 days.\n\n💰 Save up to <b>69%</b> compared to weekly payments.",
+    "tariff_monthly_price": "Price: <b>160,000 UZS</b>",
+
+    "tariff_yearly_title": "PREMIUM — 1 year",
+    "tariff_yearly_desc": "Full access to all service features for 12 months.\n\n🔥 Save up to <b>92%</b> compared to weekly payments.",
+    "tariff_yearly_price": "Price: <b>499,000 UZS</b>",
+
+    "btn_back_main_menu": "⬅️ Back to main menu",
+
+    "btn_search": "🔍 Cargo search",
+    "btn_newsletter": "📂 Newsletter",
+    "btn_tariffs": "💳 Pricing",
+    "btn_sponsors": "🤝 Sponsors",
+    "btn_settings": "⚙️ Settings"
+}

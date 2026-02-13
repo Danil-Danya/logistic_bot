@@ -8,7 +8,7 @@ const user_service_1 = __importDefault(require("../services/user.service"));
 const folder_service_1 = __importDefault(require("../services/folder.service"));
 const folder_keyboard_1 = __importDefault(require("../keyboards/folder.keyboard"));
 const menu_keyboard_1 = __importDefault(require("../keyboards/menu.keyboard"));
-const MAX_SUBSCRIPTIONS = 2;
+const MAX_SUBSCRIPTIONS = 1;
 const handleSubscribeFolder = async (ctx) => {
     const chatId = ctx.chat?.id.toString();
     const folders = await folder_service_1.default.getAllFolders();
@@ -58,11 +58,11 @@ const handleSubscribeFolderCallback = async (ctx) => {
         reply_markup: (0, menu_keyboard_1.default)(),
     };
     const user = await user_service_1.default.getUserByChatId(chatId);
+    await user_service_1.default.addToUserFolder(user.dataValues.id, folderId);
+    await ctx.reply(`✅ Вы успешно подписались на папку!`);
     if (user.folders.length >= MAX_SUBSCRIPTIONS) {
         await ctx.reply(`⚠️ Вы достигли максимального количества подписок (${MAX_SUBSCRIPTIONS}).`, replyOptions);
         return;
     }
-    await user_service_1.default.addToUserFolder(user.dataValues.id, folderId);
-    await ctx.reply(`✅ Вы успешно подписались на папку!`);
 };
 exports.handleSubscribeFolderCallback = handleSubscribeFolderCallback;

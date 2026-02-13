@@ -573,3 +573,270 @@
  *       500:
  *         description: Server error
  */
+/**
+ * @swagger
+ * /countries:
+ *   post:
+ *     summary: Создать новую страну
+ *     tags: [Countries]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name_rus:
+ *                 type: string
+ *                 description: Название страны на русском языке
+ *                 example: "Россия"
+ *               name_uzb:
+ *                 type: string
+ *                 description: Название страны на узбекском языке
+ *                 example: "Rossiya"
+ *               name_eng:
+ *                 type: string
+ *                 description: Название страны на английском языке
+ *                 example: "Russia"
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Ключевые слова для поиска страны
+ *                 example: ["Россия", "Rossiya", "Russia"]
+ *             required:
+ *               - name_rus
+ *               - name_uzb
+ *               - name_eng
+ *     responses:
+ *       201:
+ *         description: Созданная страна
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Country'
+ *       400:
+ *         description: Некорректные данные
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+/**
+ * @swagger
+ * /countries/{id}:
+ *   put:
+ *     summary: Обновить существующую страну
+ *     tags: [Countries]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор страны
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name_rus:
+ *                 type: string
+ *                 description: Название страны на русском языке
+ *                 example: "Россия"
+ *               name_uzb:
+ *                 type: string
+ *                 description: Название страны на узбекском языке
+ *                 example: "Rossiya"
+ *               name_eng:
+ *                 type: string
+ *                 description: Название страны на английском языке
+ *                 example: "Russia"
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Ключевые слова для поиска страны
+ *                 example: ["Россия", "Rossiya", "Russia"]
+ *     responses:
+ *       201:
+ *         description: Обновленная страна
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Country'
+ *       400:
+ *         description: Некорректные данные
+ *       404:
+ *         description: Страна не найдена
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+/**
+ * @swagger
+ * /countries/{id}:
+ *   patch:
+ *     summary: Редактировать существующую страну
+ *     tags: [Countries]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор страны
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name_rus:
+ *                 type: string
+ *                 description: Название страны на русском языке
+ *                 example: "Россия"
+ *               name_uzb:
+ *                 type: string
+ *                 description: Название страны на узбекском языке
+ *                 example: "Rossiya"
+ *               name_eng:
+ *                 type: string
+ *                 description: Название страны на английском языке
+ *                 example: "Russia"
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Ключевые слова для поиска страны
+ *                 example: ["Россия", "Rossiya", "Russia"]
+ *     responses:
+ *       201:
+ *         description: Отредактированная страна
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Country'
+ *       400:
+ *         description: Некорректные данные
+ *       404:
+ *         description: Страна не найдена
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+/**
+ * @swagger
+ * /countries/{id}:
+ *   delete:
+ *     summary: Удалить страну по ID
+ *     tags: [Countries]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор страны
+ *     responses:
+ *       200:
+ *         description: Страна успешно удалена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Country'
+ *       404:
+ *         description: Страна с указанным ID не найдена
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+/**
+ * @swagger
+ * /countries/{id}:
+ *   get:
+ *     summary: Получить страну по ID
+ *     tags: [Countries]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Уникальный идентификатор страны
+ *     responses:
+ *       200:
+ *         description: Страна найдена
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Country'
+ *       404:
+ *         description: Страна с указанным ID не найдена
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */
+/**
+ * @swagger
+ * /countries:
+ *   get:
+ *     summary: Получить список стран с пагинацией и фильтрацией
+ *     tags: [Countries]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Номер страницы для пагинации
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Количество элементов на странице
+ *       - in: query
+ *         name: where
+ *         schema:
+ *           type: string
+ *         description: Значение для фильтрации по определённому полю
+ *       - in: query
+ *         name: where_field
+ *         schema:
+ *           type: string
+ *         description: Поле, по которому применяются фильтры
+ *       - in: query
+ *         name: order_by
+ *         schema:
+ *           type: string
+ *         description: Поле для сортировки
+ *       - in: query
+ *         name: order_type
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *         description: Тип сортировки
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Значение для поиска по определённому полю
+ *       - in: query
+ *         name: search_field
+ *         schema:
+ *           type: string
+ *         description: Поле для поиска
+ *     responses:
+ *       200:
+ *         description: Список стран с пагинацией
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Country'
+ *       500:
+ *         description: Внутренняя ошибка сервера
+ */

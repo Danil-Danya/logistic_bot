@@ -8,8 +8,8 @@ import folderService from '../services/folder.service';
 class FolderController {
     async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const name: string = req.body.name as string;
-            const link: string = req.body.link as string;
+            const name: string = req.body.name;
+            const link: string = req.body.link;
             
             const createdFolder = await folderService.createFolder({ name, link });
             return res.status(201).json(createdFolder);

@@ -1,59 +1,61 @@
 import CountriesModel from "core/database/models/countries.model";
 import CitiesModel from "core/database/models/cities.model";
-import { Op } from "sequelize";
+import sequelize from "plugins/sequelize";
+
+import { Op, literal } from "sequelize";
+import { normalizeWords, uniqLimit } from "app/utils/geo";
 
 class GeoService {
-    async findCountriesAndCities(input: string) {
-        const words = input
-        .toLowerCase()
-        .replace(/[^a-zа-яё0-9\s]/gi, " ")
-        .split(/\s+/)
-        .filter(Boolean);
+    async findCountriesAndCitiesByKeywords(input: string) {
+        const words: string[] = normalizeWords(input);
 
-        const countryMatches = [];
-        const cityMatches = [];
-
-        for (const word of words) {
-            const country = await CountriesModel.findOne({
-                where: {
-                    [Op.or]: [
-                        { name_rus: { [Op.iLike]: `%${word}%` } },
-                        { name_uzb: { [Op.iLike]: `%${word}%` } },
-                        { name_eng: { [Op.iLike]: `%${word}%` } }
-                    ]
-                }
-            });
-
-            if (country) {
-                countryMatches.push(country.dataValues);
-            }
-
-            const city = await CitiesModel.findOne({
-                where: {
-                    [Op.or]: [
-                        { name_rus: { [Op.iLike]: `%${word}%` } },
-                        { name_uzb: { [Op.iLike]: `%${word}%` } },
-                        { name_eng: { [Op.iLike]: `%${word}%` } }
-                    ]
-                }
-            });
-
-            if (city) {
-                cityMatches.push(city.dataValues)
-            };
-
-            console.log(cityMatches, countryMatches);
-            
+        if (!words.length) {
+            return { countryMatches: [], cityMatches: [] };
         }
+
+        const countryMatches = await CountriesModel.findAll({
+            where: {
+                [Op.or]: [
+                    { keywords: { [Op.overlap]: words } },
+                    literal(`
+                        EXISTS (
+                            SELECT 1
+                            FROM unnest("Countries"."keywords") AS k
+                            WHERE ${words.map(w => `k ILIKE '%${w.replace(/'/g, "''")}%'`).join(" OR ")}
+                        )
+                    `)
+                ]
+            },
+            limit: 5,
+            raw: true
+        });
+
+        const cityMatches = await CitiesModel.findAll({
+            where: {
+                [Op.or]: [
+                    { keywords: { [Op.overlap]: words } },
+                    literal(`
+                        EXISTS (
+                            SELECT 1
+                            FROM unnest("Cities"."keywords") AS k
+                            WHERE ${words.map(w => `k ILIKE '%${w.replace(/'/g, "''")}%'`).join(" OR ")}
+                        )
+                    `)
+                ]
+            },
+            limit: 10,
+            raw: true
+        });
 
         return { countryMatches, cityMatches };
     }
 
     async getAllCitiesByCountry(countryId: string) {
         return CitiesModel.findAll({
-            where: { 
-                country_id: countryId 
-            }
+            where: {
+                country_id: countryId
+            },
+            raw: true
         });
     }
 }

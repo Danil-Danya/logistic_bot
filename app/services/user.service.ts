@@ -54,6 +54,13 @@ class UserService {
         return users;
     }
 
+    async updateUserLang (chatId: string, lang: string) {
+        const user = await User.findOne({ where: { chat_id: chatId }, include: this.include });
+        const updatedUser = await user?.update({ lang });
+
+        return updatedUser;
+    }
+
     async addToUserFolder (userId: string, folderId: string) {
         const user: any = await User.findOne({ where: { id: userId } });
         const folder: any = await Folder.findOne({ where: { id: folderId } });

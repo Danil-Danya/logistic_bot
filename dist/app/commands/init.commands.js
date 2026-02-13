@@ -19,8 +19,8 @@ const initCommands = async (bot) => {
         ]);
         bot.command("start", start_commands_1.default);
         bot.on("my_chat_member", group_handler_1.handleBotAddedToGroup);
-        bot.callbackQuery("newsletter", newsletter_handler_1.handleNewsletterStart);
         bot.callbackQuery(/^subscribe_folder_(.+)$/, folder_handler_1.handleSubscribeFolderCallback);
+        bot.callbackQuery("newsletter", newsletter_handler_1.handleNewsletterStart);
         bot.callbackQuery("search", search_handler_1.handleSearchCommand);
         bot.on("message:text", async (ctx, next) => {
             if (ctx.chat.type !== "private") {
@@ -35,7 +35,6 @@ const initCommands = async (bot) => {
             await (0, search_handler_1.handleUserMessageForSearch)(ctx);
         });
         bot.on("message:text", async (ctx) => {
-            console.log(123);
             if (ctx.chat.type === "group" || ctx.chat.type === "supergroup") {
                 await (0, message_handler_1.handleGroupMessage)(ctx);
             }
